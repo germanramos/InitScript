@@ -1,11 +1,11 @@
 #!/bin/sh
-#/etc/init.d/sleep
+#/etc/init.d/sleepForever
 
-NAME=sleep
+NAME=sleepForever
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=sleep
-DAEMON_ARGS=10
-RUNDIR=/tmp
+DAEMON=/usr/bin/forever.sh
+DAEMON_ARGS="sleep 10"
+RUNDIR=/home/ubuntu/sleep
 USER=ubuntu
 GROUP=ubuntu
 PIDDIR=/var/run
