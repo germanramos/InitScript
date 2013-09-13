@@ -1,15 +1,17 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-	echo "Usage: $0 device timeout(s)"
-	echo "Example: $0 sdb 1800"
+if [ $# -ne 3 ]; then
+	echo "Usage: $0 device timeout(s) logfile"
+	echo "Example: $0 sdb 1800 /tmp/hdsleep.log"
 	exit
 fi
 
 DEV=$1
 TIMEOUT=$2
+LOGFILE=$3
 
-echo `date`:hdsleep init
+cp $LOGFILE $LOGFILE.old
+echo `date`:hdsleep init>$LOGFILE
 
 I=0
 while true; do
@@ -19,16 +21,16 @@ while true; do
 	# Check status
 	if [ $STATUS -eq 0 ]; then
 		I=$[$I+1]
-		#echo `date`: No event detected. Increase counter.
+		#echo `date`: No event detected. Increase counter>>$LOGFILE
 	else
 		I=0
-		#echo `date` Event detected. Reset counter.
+		echo `date` Event detected. Reset counter>>$LOGFILE
 	fi
 
 	# Suspend if necesary
 	if [ $I -eq $TIMEOUT ]; then
-		echo `date`: Suspending disk
-		hdparm -y $DEV
+		echo `date`: Suspending disk>>$LOGFILE
+		hdparm -y /dev/$DEV
 	fi
 
 	sleep 1
